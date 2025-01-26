@@ -41,7 +41,8 @@ const Feed = () => {
         height: "calc(100vh - 58px)",
       }}
     >
-      {feed.length > 0 && feed.map((item) => <FeedItem feed={item} />)}
+      {feed.length > 0 &&
+        feed.map((item, index) => <FeedItem key={index} feed={item} />)}
     </Box>
   );
 };

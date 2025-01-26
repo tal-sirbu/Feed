@@ -100,6 +100,7 @@ const FeedItem = ({ feed }: { feed: FeedType }) => {
             (image, index) =>
               index <= IMEGES_LIMIT && (
                 <CardMedia
+                  key={index}
                   component="img"
                   sx={{
                     width: "547px",
