@@ -2,26 +2,11 @@ import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import FeedItem from "../components/Item";
-import { SKIP_NUMBER } from "./consts";
-
-export type FeedType = {
-  id: string;
-  userId: string;
-  username: string;
-  avatar: string;
-  shopName: string;
-  shopId: string;
-  images: string[];
-  comments: number;
-  date: Date;
-  text: string;
-  likes: number;
-  didLike: boolean;
-  premium: boolean;
-};
+import { FEED_URL, SKIP_NUMBER } from "./consts";
+import { FeedType } from "./types";
 
 const Feed = () => {
-  const [feed, setFeed] = useState([]);
+  const [feed, setFeed] = useState<FeedType[]>([]);
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -30,10 +15,7 @@ const Feed = () => {
     if (hasMore && !loading) {
       setLoading(true);
       try {
-        const response = await axios.get(
-          `https://backend.tedooo.com/hw/feed.json?skip=${skip}`
-        );
-
+        const response = await axios.get(`${FEED_URL}?skip=${skip}`);
         const data = response.data;
         setFeed((prevFeed) => [...prevFeed, ...data.data]);
         setHasMore(data.hasMore);

@@ -7,21 +7,26 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Box, Button, Divider } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { FeedType } from "./Feed";
+import { FeedType } from "./types";
+import {
+  FEED_VIEWING_PRECENTAGE,
+  IMEGES_LIMIT,
+  IMPRESSION_URL,
+} from "./consts";
 
 const FeedItem = ({ feed }: { feed: FeedType }) => {
   const { username, avatar, shopName, text, images, likes, comments, id } =
     feed;
   const [clicked, setClicked] = useState(false);
   const viewedItemsRef = useRef(new Set<string>());
-  const observer = useRef(null);
+  const observer = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     observer.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const itemId = entry.target.dataset.id;
+            const itemId = (entry.target as HTMLElement).dataset.id;
 
             if (itemId && !viewedItemsRef.current.has(itemId)) {
               sendImpression(itemId);
@@ -30,15 +35,15 @@ const FeedItem = ({ feed }: { feed: FeedType }) => {
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: FEED_VIEWING_PRECENTAGE }
     );
 
-    return () => observer.current.disconnect();
+    return () => observer.current?.disconnect();
   }, []);
 
-  const sendImpression = async (itemId) => {
+  const sendImpression = async (itemId: string) => {
     try {
-      await fetch(`https://backend.tedooo.com/?itemId=${itemId}`, {
+      await fetch(`${IMPRESSION_URL}/?itemId=${itemId}`, {
         method: "GET",
       });
       console.log(`Impression sent for item ID: ${itemId}`);
@@ -47,7 +52,7 @@ const FeedItem = ({ feed }: { feed: FeedType }) => {
     }
   };
 
-  const attachObserver = (element) => {
+  const attachObserver = (element: HTMLElement | null) => {
     if (element) observer?.current?.observe(element);
   };
 
@@ -79,13 +84,7 @@ const FeedItem = ({ feed }: { feed: FeedType }) => {
         }}
       >
         <CardHeader
-          avatar={
-            <Avatar
-              sx={{ width: 56, height: 56 }}
-              alt="User Avatar"
-              src={avatar}
-            />
-          }
+          avatar={<Avatar sx={{ width: 56, height: 56 }} src={avatar} />}
           title={username}
           subheader={shopName}
         />
@@ -100,7 +99,7 @@ const FeedItem = ({ feed }: { feed: FeedType }) => {
         >
           {images.map(
             (image, index) =>
-              index <= 1 && (
+              index <= IMEGES_LIMIT && (
                 <CardMedia
                   component="img"
                   sx={{
@@ -166,4 +165,5 @@ const FeedItem = ({ feed }: { feed: FeedType }) => {
     </Box>
   );
 };
+
 export default FeedItem;
