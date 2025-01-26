@@ -93,7 +93,6 @@ const Navbar = () => {
                   fontSize: "16px",
                   fontWeight: "500",
                   lineHeight: "24px",
-
                   textAlign: "left",
                   textUnderlinePosition: "from-font",
                   textDecorationSkipInk: "none",
