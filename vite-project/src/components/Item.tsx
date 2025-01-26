@@ -46,7 +46,6 @@ const FeedItem = ({ feed }: { feed: FeedType }) => {
       await fetch(`${IMPRESSION_URL}/?itemId=${itemId}`, {
         method: "GET",
       });
-      console.log(`Impression sent for item ID: ${itemId}`);
     } catch (error) {
       console.error(`Failed to send impression for item ID: ${itemId}`, error);
     }
