@@ -6,10 +6,10 @@ import CardActions from "@mui/material/CardActions";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import { Box, Button, Divider } from "@mui/material";
-import { Feed } from "../routes/index.lazy";
 import { useEffect, useRef, useState } from "react";
+import { FeedType } from "./Feed";
 
-const FeedItem = ({ feed }: { feed: Feed }) => {
+const FeedItem = ({ feed }: { feed: FeedType }) => {
   const { username, avatar, shopName, text, images, likes, comments, id } =
     feed;
   const [clicked, setClicked] = useState(false);
@@ -46,12 +46,13 @@ const FeedItem = ({ feed }: { feed: Feed }) => {
       console.error(`Failed to send impression for item ID: ${itemId}`, error);
     }
   };
-  const handleClick = () => {
-    setClicked(!clicked);
-  };
 
   const attachObserver = (element) => {
     if (element) observer?.current?.observe(element);
+  };
+
+  const handleClick = () => {
+    setClicked(!clicked);
   };
 
   return (
